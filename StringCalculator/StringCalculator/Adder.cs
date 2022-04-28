@@ -8,13 +8,11 @@
             {
                 return 0;
             }
-            if (numbers.Contains(","))
-            {
-                var indexOfComma = numbers.IndexOf(',');
-                return int.Parse(numbers.Substring(0, indexOfComma)) +
-                       int.Parse(numbers.Substring(indexOfComma + 1));
-            }
-            return int.Parse(numbers);
+
+            var individualNumbers = numbers.Split(',');
+
+            return individualNumbers.Select(int.Parse)
+                                    .Sum();
         }
     }
 }
