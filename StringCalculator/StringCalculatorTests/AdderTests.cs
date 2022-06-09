@@ -56,5 +56,16 @@ namespace StringCalculatorTests
             var calculation = adder.Add(input);
             Assert.Equal(expectedResult, calculation);
         }
+
+        [Theory]
+        [InlineData("//;\n1;2", 3)]
+        [InlineData("//\n\n1\n2", 3)]
+        [InlineData("//,\n1,2", 3)]
+        public void ShouldReturnAdditionOnCustomDelimiter(string input, int expectedResult)
+        {
+            var adder = new Adder();
+            var calculation = adder.Add(input);
+            Assert.Equal(expectedResult, calculation);
+        }
     }
 }
