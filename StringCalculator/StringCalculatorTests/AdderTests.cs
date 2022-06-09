@@ -38,7 +38,19 @@ namespace StringCalculatorTests
         [Theory]
         [InlineData("1,2,3", 6)]
         [InlineData("1,2,3,4", 10)]
+        [InlineData("1,2,3,4,5", 15)]
         public void ShouldReturnAdditionOnMultipleEntries(string input, int expectedResult)
+        {
+            var adder = new Adder();
+            var calculation = adder.Add(input);
+            Assert.Equal(expectedResult, calculation);
+        }
+
+        [Theory]
+        [InlineData("1\n2,3", 6)]
+        [InlineData("1\n2,3\n4",10)]
+        [InlineData("1\n2",3)]
+        public void ShouldReturnAdditionOnEndOfLine(string input, int expectedResult)
         {
             var adder = new Adder();
             var calculation = adder.Add(input);
