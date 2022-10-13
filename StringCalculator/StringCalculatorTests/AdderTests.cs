@@ -1,4 +1,5 @@
 using StringCalculator;
+using System;
 using Xunit;
 
 namespace StringCalculatorTests
@@ -66,6 +67,20 @@ namespace StringCalculatorTests
             var adder = new Adder();
             var calculation = adder.Add(input);
             Assert.Equal(expectedResult, calculation);
+        }
+
+        [Theory]
+        [InlineData("-1,2", "-1")]
+        [InlineData("1,-2", "-2")]
+        [InlineData("1,2,-3", "-3")]
+        [InlineData("-", "-")]
+        [InlineData("-1,-2", "-1, -2")]
+        [InlineData("//;\n-1;-2", "-1, -2")]
+        public void ShouldThrowExceptionOnNegativeNumbers(string input, string negativeString)
+        {
+            var adder = new Adder();
+            var expectedException = Assert.Throws<ArgumentException>(() => adder.Add(input));
+            Assert.Equal(Constants.NoNegativeNumbers + negativeString, expectedException.Message);
         }
     }
 }

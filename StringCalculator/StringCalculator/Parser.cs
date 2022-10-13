@@ -19,7 +19,7 @@ namespace StringCalculator
         /// and skip "//x\n" from the input string
         /// </summary>
         /// <param name="input">The input string, with or without a custom separator</param>
-        public Parser(string input)
+        internal Parser(string input)
         {
             if (input.StartsWith("//"))
             {
@@ -31,10 +31,23 @@ namespace StringCalculator
             this.input = input;
         }
 
-        public IEnumerable<int> GetIndividualNumbers()
+        /// <summary>
+        /// Separates numbers from the string based on separators that have been found. Any negative number will throw an <see cref="ArgumentException"/>
+        /// </summary>
+        /// <exception cref="ArgumentException"></exception>
+        internal IEnumerable<int> GetIndividualNumbers()
         {
-            return input.Split(separators.ToArray())
-                        .Select(int.Parse);
+            var parsables = input.Split(separators.ToArray())
+                                 .ToLookup(parsable => !parsable.Contains('-'));
+            var positives = parsables[true];
+            var negatives = parsables[false];
+
+            if (negatives.Any())
+            {
+                throw new ArgumentException(Constants.NoNegativeNumbers + string.Join(", ", negatives));
+            }
+            
+            return positives.Select(int.Parse);
         }
     }
 }
