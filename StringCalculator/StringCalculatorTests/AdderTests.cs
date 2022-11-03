@@ -9,8 +9,7 @@ namespace StringCalculatorTests
         [Fact]
         public void ShouldReturn0OnEmptyString()
         {
-            var adder = new Adder();
-            var calculation = adder.Add(string.Empty);
+            var calculation = Adder.Add(string.Empty);
             Assert.Equal(0, calculation);
         }
 
@@ -20,8 +19,7 @@ namespace StringCalculatorTests
         [InlineData("24", 24)]
         public void ShouldReturnInputOnSingleDigit(string input, int expectedResult)
         {
-            var adder = new Adder();
-            var calculation = adder.Add(input);
+            var calculation = Adder.Add(input);
             Assert.Equal(expectedResult, calculation);
         }
 
@@ -29,10 +27,10 @@ namespace StringCalculatorTests
         [InlineData("1,2", 3)]
         [InlineData("10,2", 12)]
         [InlineData("10,20", 30)]
+        [InlineData("1000,20", 1020)]
         public void ShouldReturnAdditionOnTwoEntries(string input, int expectedResult)
         {
-            var adder = new Adder();
-            var calculation = adder.Add(input);
+            var calculation = Adder.Add(input);
             Assert.Equal(expectedResult, calculation);
         }
 
@@ -42,8 +40,7 @@ namespace StringCalculatorTests
         [InlineData("1,2,3,4,5", 15)]
         public void ShouldReturnAdditionOnMultipleEntries(string input, int expectedResult)
         {
-            var adder = new Adder();
-            var calculation = adder.Add(input);
+            var calculation = Adder.Add(input);
             Assert.Equal(expectedResult, calculation);
         }
 
@@ -53,8 +50,7 @@ namespace StringCalculatorTests
         [InlineData("1\n2",3)]
         public void ShouldReturnAdditionOnEndOfLine(string input, int expectedResult)
         {
-            var adder = new Adder();
-            var calculation = adder.Add(input);
+            var calculation = Adder.Add(input);
             Assert.Equal(expectedResult, calculation);
         }
 
@@ -64,8 +60,7 @@ namespace StringCalculatorTests
         [InlineData("//,\n1,2", 3)]
         public void ShouldReturnAdditionOnCustomDelimiter(string input, int expectedResult)
         {
-            var adder = new Adder();
-            var calculation = adder.Add(input);
+            var calculation = Adder.Add(input);
             Assert.Equal(expectedResult, calculation);
         }
 
@@ -78,9 +73,15 @@ namespace StringCalculatorTests
         [InlineData("//;\n-1;-2", "-1, -2")]
         public void ShouldThrowExceptionOnNegativeNumbers(string input, string negativeString)
         {
-            var adder = new Adder();
-            var expectedException = Assert.Throws<ArgumentException>(() => adder.Add(input));
+            var expectedException = Assert.Throws<ArgumentException>(() => Adder.Add(input));
             Assert.Equal(Constants.NoNegativeNumbers + negativeString, expectedException.Message);
+        }
+
+        [Theory]
+        [InlineData("2,1001", 2)]
+        public void ShouldIgnoreNumbersStrictlyAbove1000(string input, int expectedResult)
+        {
+            Assert.Equal(expectedResult, Adder.Add(input));
         }
     }
 }

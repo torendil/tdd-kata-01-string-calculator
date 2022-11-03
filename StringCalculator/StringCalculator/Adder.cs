@@ -1,8 +1,8 @@
 ﻿namespace StringCalculator
 {
-    public class Adder
+    public static class Adder
     {
-        public int Add(string numbers)
+        public static int Add(string numbers)
         {
             if (string.IsNullOrEmpty(numbers))
             {
@@ -12,7 +12,9 @@
             var parser = new Parser(numbers);
             var individualNumbers = parser.GetIndividualNumbers();
 
-            return individualNumbers.Sum();
+            return individualNumbers
+                .Where(x => x <= 1000)
+                .Sum();
         }
     }
 }
